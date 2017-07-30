@@ -27,7 +27,7 @@ function storeFront(){
 
   // Create new Table Object.
   let table = new Table({
-      head: ['ID', 'Product', 'Department', 'Price ($)', 'QTY'],
+      head: ['ID', 'Product','Price ($)', 'QTY'],
   });
 
   // Array of all the IDs to be used for validation later.
@@ -38,7 +38,7 @@ function storeFront(){
     if (error) throw error;
     for (var i = 0; i < res.length; i++) {
       let tRow = [];
-      tRow.push(res[i].item_id,res[i].product_name,res[i].department_name,res[i].price,res[i].stock_quantity);
+      tRow.push(res[i].item_id,res[i].product_name,res[i].price,res[i].stock_quantity);
       table.push(tRow);
       idArr.push(res[i].item_id);
     }
@@ -100,6 +100,7 @@ function checkQty(id, qty, array){
       customerInput(array);
     } else {
       let totalPrice = itemPrice * qty;
+      updateSalesTotal(id,totalPrice);
       fulfillOrder(id, leftOverQty, totalPrice);
     }
 
@@ -140,4 +141,20 @@ function shopMore(){
     }
 })
 
+}
+
+// Update Sales total
+function updateSalesTotal(id,priceTotal){
+
+  db.query("SELECT product_sales FROM products WHERE item_id= ?", id, (err,res,fields)=>{
+    if (err) throw err;
+    console.log("Sales Total Updated.");
+    let currentTotal = res[0].product_sales;
+    let updatedTotal = currentTotal + priceTotal;
+
+    db.query("UPDATE products SET product_sales= ? WHERE item_id= ?", [updatedTotal, id], (err,res,fields)=>{
+      if (err) throw err;
+    })
+
+  })
 }

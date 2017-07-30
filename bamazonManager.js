@@ -31,7 +31,7 @@ function menuScreen(){
     {
       name: 'optionsList',
       type: 'list',
-      choices: [' - VIEW PRODUCTS', ' - VIEW LOW INVENTORY', ' - (+) ADD INVENTORY', ' - (+) ADD PRODUCT' ],
+      choices: [' - VIEW PRODUCTS', ' - VIEW LOW INVENTORY', ' - (+) ADD INVENTORY', ' - (+) ADD PRODUCT', ' - EXIT' ],
       message: 'What would you like to do?'
     }
     ]).then((choice) => {
@@ -48,6 +48,8 @@ function menuScreen(){
         addInventory();
       } else if (c === ' - (+) ADD PRODUCT'){
         addProduct();
+      } else if (c === ' - EXIT' ){
+        db.end();
       }
 
     })
@@ -57,14 +59,14 @@ function menuScreen(){
 // View Products
 function viewProducts(query){
 
-  let table = new Table({head:['ID', 'Product', 'Department', 'Price ($)', 'QTY']});
+  let table = new Table({head:['ID', 'Product', 'Price ($)', 'QTY']});
 
   db.query(query, (err, res, fields) => {
     if (err) throw err;
 
     for (var i = 0; i < res.length; i++) {
       let tRow = [];
-      tRow.push(res[i].item_id, res[i].product_name, res[i].department_name, res[i].price, res[i].stock_quantity);
+      tRow.push(res[i].item_id, res[i].product_name, res[i].price, res[i].stock_quantity);
       table.push(tRow);
     }
     console.log("\n"+table.toString()+"\n");
@@ -131,7 +133,7 @@ function addInventory(){
 function addProduct(){
   // Getting all the Department Names into an Array.
   let deptArr = [];
-  db.query("SELECT department_name FROM products GROUP BY department_name", (err, res, fields)=>{
+  db.query("SELECT department_name FROM departments GROUP BY department_name", (err, res, fields)=>{
     if (err) throw err;
 
     for (var i = 0; i < res.length; i++) {
@@ -167,22 +169,24 @@ function addProduct(){
         choices: departments
       }
     ]).then((results)=>{
-      let pName = results.productName;
-      let pQty = validateQty(parseInt(results.productQty));
-      let pDept = results.productDept;
-      let pPrice = validatePrice(results.productPrice);
+      // Get Department Id.
+      db.query("SELECT department_id FROM departments WHERE department_name=?", results.productDept, (err, res, fields)=>{
+        if (err) throw err;
+        let pDept = res[0].department_id;
+        let pName = results.productName;
+        let pQty = validateQty(parseInt(results.productQty));
+        let pPrice = validatePrice(results.productPrice);
 
-      addProdDB(pName, pDept, pPrice, pQty);
-
+        addProdDB(pName, pDept, pPrice, pQty);
+      })
 
       function addProdDB(name, dept, price, qty){
-        db.query("INSERT INTO products SET product_name=?, department_name=?, price=?, stock_quantity=?",[name, dept, price, qty],(err, res, fields) =>{
+        db.query("INSERT INTO products SET product_name=?, department_id=?, price=?, stock_quantity=?",[name, dept, price, qty],(err, res, fields) =>{
         if (err) throw err;
         console.log("\nThank You! New Merchandise has been added!\n")
         menuScreen();
         })
       }
-
 
 
       function validateQty(qty){
