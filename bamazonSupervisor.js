@@ -31,7 +31,7 @@ function menuScreen(){
     {
       name: 'sOptions',
       type: 'list',
-      choices: [' - VIEW PRODUCT SALES BY DEPARTMENT', ' - (+) ADD DEPARTMENT', ' - EXIT'],
+      choices: [' - VIEW PRODUCT SALES BY DEPARTMENT', ' - VIEW INDIVIDUAL PRODUCT SALE', ' - (+) ADD DEPARTMENT', ' - EXIT'],
       message: '\nWhat would you like to do?\n'
     }
     ]).then((choice)=>{
@@ -39,6 +39,8 @@ function menuScreen(){
           viewSales();
         } else if (choice.sOptions === ' - (+) ADD DEPARTMENT'){
           createDepartment();
+        } else if (choice.sOptions === ' - VIEW INDIVIDUAL PRODUCT SALE'){
+          viewIndividualSales();
         } else if (choice.sOptions === ' - EXIT'){
           db.end();
         }
@@ -71,6 +73,35 @@ function viewSales(){
     });
 
 }
+
+
+function viewIndividualSales(){
+
+  let table = new Table({head:['Department ID', 'Department Name', 'Product ID', 'Product Name', 'Product Sales']})
+
+  db.query(
+  `SELECT d.department_id,
+  d.department_name,
+  d.over_head_costs,
+  p.item_id,
+  p.product_name,
+  p.product_sales
+  FROM departments d
+  INNER JOIN products p
+  ON d.department_id = p.department_id`,
+  (err, res, fields)=>{
+      if (err) throw err;
+      for (var i = 0; i < res.length; i++) {
+        let resArr=[];
+        resArr.push(res[i].department_id, res[i].department_name, res[i].item_id, res[i].product_name, res[i].product_sales);
+        table.push(resArr);
+      }
+      console.log(table.toString());
+      menuScreen();
+    });
+
+}
+
 
 
 function createDepartment(){
@@ -108,5 +139,4 @@ function createDepartment(){
 // p.product_sales - d.over_head_costs AS total_profit
 // FROM departments d
 // INNER JOIN products p
-// ON d.department_id = p.department_id
-// GROUP BY department_id;
+// ON d.department_id = p.department_id;
