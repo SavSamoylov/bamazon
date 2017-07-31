@@ -94,13 +94,14 @@ function checkQty(id, qty, array){
 
     let leftOverQty = res[0].stock_quantity - qty;
     let itemPrice = res[0].price;
+    let deptId = res[0].department_id;
 
     if (leftOverQty < 0){
       console.log("\nInsufficient Quantity!\n");
       customerInput(array);
     } else {
       let totalPrice = itemPrice * qty;
-      updateSalesTotal(id,totalPrice);
+      updateSalesTotal(deptId,totalPrice);
       fulfillOrder(id, leftOverQty, totalPrice);
     }
 
@@ -146,13 +147,13 @@ function shopMore(){
 // Update Sales total
 function updateSalesTotal(id,priceTotal){
 
-  db.query("SELECT product_sales FROM products WHERE item_id= ?", id, (err,res,fields)=>{
+  db.query("SELECT product_sales FROM departments WHERE department_id= ?", id, (err,res,fields)=>{
     if (err) throw err;
     console.log("Sales Total Updated.");
     let currentTotal = res[0].product_sales;
     let updatedTotal = currentTotal + priceTotal;
 
-    db.query("UPDATE products SET product_sales= ? WHERE item_id= ?", [updatedTotal, id], (err,res,fields)=>{
+    db.query("UPDATE departments SET product_sales= ? WHERE department_id= ?", [updatedTotal, id], (err,res,fields)=>{
       if (err) throw err;
     })
 

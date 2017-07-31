@@ -55,11 +55,9 @@ function viewSales(){
   `SELECT d.department_id,
   d.department_name,
   d.over_head_costs,
-  p.product_sales,
-  p.product_sales - d.over_head_costs AS total_profit
+  d.product_sales,
+  d.product_sales - d.over_head_costs AS total_profit
   FROM departments d
-  INNER JOIN products p
-  ON d.department_id = p.department_id
   GROUP BY department_id`,
   (err, res, fields)=>{
       if (err) throw err;
