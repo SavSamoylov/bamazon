@@ -4,8 +4,7 @@
 ---
 
 ##### YouTube Demo - https://youtu.be/emBMZWIemIA
-#
-#
+
 **bAmazon** is a simple Command Line ecommerce application.
 It presents the user with 3 Options.
 - Customer View
@@ -13,8 +12,7 @@ It presents the user with 3 Options.
 - Store Supervisor View
 
 It uses the **Inquirer**, **mysql**, and **cli-table** npm packages.
-#
-#
+
 ## Customer View
 To run, simply type the following in the Terminal.
 ```
