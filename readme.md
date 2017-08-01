@@ -1,12 +1,10 @@
 
 # bAMAZON (CLI Ecommerce App)
-#
-#
+
 ---
 
 ##### YouTube Demo - https://youtu.be/emBMZWIemIA
-#
-#
+
 **bAmazon** is a simple Command Line ecommerce application.
 It presents the user with 3 Options.
 - Customer View
@@ -14,32 +12,36 @@ It presents the user with 3 Options.
 - Store Supervisor View
 
 It uses the **Inquirer**, **mysql**, and **cli-table** npm packages.
-#
-#
+
 ## Customer View
 To run, simply type the following in the Terminal.
 ```
 node bamazonCustomer.js
 ```
-[[https://github.com/SavSamoylov/bamazon/blob/master/screenshots/customerScreen.png|alt=customer_screen]]
+
+![Alt text](/screenshots/customerScreen.png?raw=true "Customer Screen")
+
 
 ## Store Manager View
 To run, simply type the following in the Terminal.
 ```
 node bamazonManager.js
 ```
-[[https://github.com/SavSamoylov/bamazon/blob/master/screenshots/managerView.png|alt=manager_screen]]
+![Alt text](/screenshots/managerView.png?raw=true "Manager Screen")
+
 
 ## Store Supervisor View
 To run, simply type the following in the Terminal.
 ```
 node bamazonSupervisor.js
 ```
-[[https://github.com/SavSamoylov/bamazon/blob/master/screenshots/supervisorView.png|alt=supervisor_screen]]
+![Alt text](/screenshots/supervisorView.png?raw=true "Supervisor Screen")
+
 
 Here is a list of Profits based on Department.
 
-[[https://github.com/SavSamoylov/bamazon/blob/master/screenshots/supervisorTable.png|alt=supervisor_table]]
+![Alt text](/screenshots/supervisorTable.png?raw=true "Profits Table")
+
 
 ### Please watch the YouTube video to see all the features of the app in action.
 ##### YouTube Demo - https://youtu.be/emBMZWIemIA
