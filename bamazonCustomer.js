@@ -102,8 +102,8 @@ function checkQty(id, qty, array){
       customerInput(array);
     } else {
       let totalPrice = itemPrice * qty;
-      updateSalesTotal(prodId,deptId,totalPrice);
-      fulfillOrder(id, leftOverQty, totalPrice);
+      updateSalesTotal(prodId,totalPrice);
+      fulfillOrder(prodId, leftOverQty, totalPrice);
     }
 
   });
@@ -146,20 +146,7 @@ function shopMore(){
 }
 
 // Update Sales total
-function updateSalesTotal(pid,did,priceTotal){
-
-  // Update Departments Table
-  db.query("SELECT product_sales FROM departments WHERE department_id= ?", did, (err,res,fields)=>{
-    if (err) throw err;
-    let currentTotal = res[0].product_sales;
-    let updatedTotal = currentTotal + priceTotal;
-
-    db.query("UPDATE departments SET product_sales= ? WHERE department_id= ?", [updatedTotal, did], (err,res,fields)=>{
-      if (err) throw err;
-    })
-
-  })
-
+function updateSalesTotal(pid, priceTotal){
 
   // Update Products Table
   db.query("SELECT product_sales FROM products WHERE item_id= ?", pid, (err,res,fields)=>{
